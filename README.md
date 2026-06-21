@@ -55,7 +55,7 @@ Output in `dist/` — deploy to any static host (Netlify, Vercel, Render, etc).
 
 ## API
 
-Connects to: `https://simple-survey-api-production.up.render.app/api`
+Connects to: `https://simple-survey-api-c3kj.onrender.com`
 
 Proxy configured in `vite.config.js` for local development.
 
