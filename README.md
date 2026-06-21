@@ -28,13 +28,13 @@ Admin and public web interface for the Simple Survey platform — built with **R
 ## Getting Started
 
 ```bash
-git clone https://github.com/symonmwangi/simple-survey-web.git
+git clone https://github.com/brendah-4/simple-survey-web.git
 cd simple-survey-web
 npm install
 npm run dev
 ```
 
-The dev server proxies `/api` requests to the live Railway API automatically.
+The dev server proxies `/api` requests to the live Render API automatically.
 
 ## Features
 
@@ -51,11 +51,11 @@ The dev server proxies `/api` requests to the live Railway API automatically.
 npm run build
 ```
 
-Output in `dist/` — deploy to any static host (Netlify, Vercel, Railway, etc).
+Output in `dist/` — deploy to any static host (Netlify, Vercel, Render, etc).
 
 ## API
 
-Connects to: `https://simple-survey-api-production.up.railway.app/api`
+Connects to: `https://simple-survey-api-production.up.render.app/api`
 
 Proxy configured in `vite.config.js` for local development.
 
