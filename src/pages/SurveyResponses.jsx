@@ -196,7 +196,7 @@ export default function SurveyResponses() {
                   </div>
                   <div className="flex items-center gap-2">
                     {resp.certificate_path && (
-                      
+                      <a
                         href={`/api/files/certificate/${resp.id}`}
                         onClick={e => e.stopPropagation()}
                         className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg font-medium"
@@ -235,7 +235,7 @@ export default function SurveyResponses() {
                         {getFiles(ans).length > 0 && (
                           <div className="mt-2 flex flex-wrap gap-2">
                             {getFiles(ans).map(f => (
-                              
+                              <a
                                 key={f.id}
                                 href={`/api/certificates/${f.id}`}
                                 className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg font-medium"
