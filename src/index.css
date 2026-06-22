@@ -1,6 +1,47 @@
 @import "tailwindcss";
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  background-color: #F5F5F7;
+}
+
+:root {
+  --brand: #4F46E5;
+  --brand-dark: #3730A3;
+  --brand-light: #EEF2FF;
+}
+
+/* Smooth transitions */
+button, a, input, select, textarea {
+  transition: border-color 0.15s, background-color 0.15s, box-shadow 0.15s;
+}
+
+/* Better scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #c7c7c7; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #a0a0a0; }
+
+/* Better focus rings */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #4F46E5 !important;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* Button press effect */
+button:active { transform: scale(0.98); }
+
+/* Card hover lift */
+.card-hover {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(79, 70, 229, 0.12);
 }
