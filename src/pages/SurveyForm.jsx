@@ -107,7 +107,7 @@ export default function SurveyForm() {
         <h2 className="text-2xl font-bold text-gray-800 mb-2">Thank you!</h2>
         <p className="text-gray-500 mb-8">Your response has been submitted successfully.</p>
         {responseId && (
-          
+          <a
             href={`/api/files/certificate/${responseId}`}
             className="inline-flex items-center gap-2 text-white px-6 py-3 rounded-xl text-sm font-medium mb-4 shadow-sm"
             style={{ background: 'linear-gradient(135deg, #4F46E5, #7C3AED)' }}>
