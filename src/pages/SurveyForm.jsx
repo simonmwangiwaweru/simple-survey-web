@@ -46,7 +46,6 @@ export default function SurveyForm() {
 
   const total = questions.length;
   const q = questions[current];
-  const progress = reviewing ? 100 : ((current) / total) * 100;
 
   const setAnswer = (val) => setAnswers(a => ({ ...a, [q.id]: val }));
   const setFile = (fileList) => setFiles(f => ({ ...f, [q.id]: fileList }));
@@ -96,7 +95,6 @@ export default function SurveyForm() {
     setSubmitting(false);
   };
 
-  // Success screen
   if (done) {
     return (
       <div className="max-w-lg mx-auto text-center py-16 px-4">
@@ -107,7 +105,7 @@ export default function SurveyForm() {
         <h2 className="text-2xl font-bold text-gray-800 mb-2">Thank you!</h2>
         <p className="text-gray-500 mb-8">Your response has been submitted successfully.</p>
         {responseId && (
-          <a
+          
             href={`/api/files/certificate/${responseId}`}
             className="inline-flex items-center gap-2 text-white px-6 py-3 rounded-xl text-sm font-medium mb-4 shadow-sm"
             style={{ background: 'linear-gradient(135deg, #4F46E5, #7C3AED)' }}>
@@ -124,17 +122,13 @@ export default function SurveyForm() {
     );
   }
 
-  // Review screen
   if (reviewing) {
     return (
       <div className="max-w-2xl mx-auto px-1">
-        {/* Header */}
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-800 mb-1">{survey.title}</h1>
           <p className="text-gray-500 text-sm">Review your answers before submitting.</p>
         </div>
-
-        {/* Progress */}
         <div className="mb-6">
           <div className="flex justify-between text-xs text-gray-400 mb-2">
             <span>All questions answered</span>
@@ -145,8 +139,6 @@ export default function SurveyForm() {
               style={{ background: 'linear-gradient(90deg, #4F46E5, #7C3AED)' }} />
           </div>
         </div>
-
-        {/* Answers */}
         <div className="space-y-3 mb-6">
           {questions.map((q, i) => (
             <div key={q.id} className="bg-white rounded-2xl p-4 shadow-sm"
@@ -180,14 +172,12 @@ export default function SurveyForm() {
             </div>
           ))}
         </div>
-
         {error && (
           <div className="text-red-700 text-sm mb-4 p-3 rounded-xl flex items-center gap-2"
             style={{ backgroundColor: '#FFF1F2', border: '0.5px solid #FCA5A5' }}>
             ⚠️ {error}
           </div>
         )}
-
         <div className="flex justify-between gap-3">
           <button
             onClick={back}
@@ -211,18 +201,14 @@ export default function SurveyForm() {
     );
   }
 
-  // Question screen
   return (
     <div className="max-w-2xl mx-auto px-1">
-      {/* Survey title */}
       <div className="mb-5">
         <h1 className="text-xl sm:text-2xl font-bold text-gray-800">{survey.title}</h1>
         {survey.description && (
           <p className="text-gray-500 text-sm mt-1">{survey.description}</p>
         )}
       </div>
-
-      {/* Progress bar */}
       <div className="mb-6">
         <div className="flex justify-between text-xs text-gray-400 mb-2">
           <span>Question {current + 1} of {total}</span>
@@ -237,8 +223,6 @@ export default function SurveyForm() {
             }} />
         </div>
       </div>
-
-      {/* Step dots */}
       <div className="flex items-center gap-1.5 mb-6">
         {questions.map((_, i) => (
           <div
@@ -251,8 +235,6 @@ export default function SurveyForm() {
             }} />
         ))}
       </div>
-
-      {/* Question card */}
       <div className="bg-white rounded-2xl p-6 sm:p-8 mb-5 shadow-sm"
         style={{ border: '0.5px solid #E5E7EB', borderTop: '4px solid #4F46E5' }}>
         <p className="text-xs font-semibold uppercase tracking-wide mb-3"
@@ -276,8 +258,6 @@ export default function SurveyForm() {
           </div>
         )}
       </div>
-
-      {/* Navigation */}
       <div className="flex justify-between items-center gap-3">
         {current > 0 ? (
           <button
@@ -302,7 +282,7 @@ function QuestionInput({ q, value, onChange, onFile }) {
     ? (Array.isArray(q.options.item) ? q.options.item : [q.options.item])
     : (Array.isArray(q.options) ? q.options : []);
 
-  const inputClass = "w-full rounded-xl px-4 py-3 text-sm focus:outline-none"
+  const inputClass = "w-full rounded-xl px-4 py-3 text-sm focus:outline-none";
   const inputStyle = { border: '0.5px solid #E5E7EB', backgroundColor: '#F9FAFB', color: '#1F2937' };
 
   switch (q.type) {
@@ -342,8 +322,9 @@ function QuestionInput({ q, value, onChange, onFile }) {
       return (
         <div className="space-y-2">
           {options.map(opt => (
-            <label
+            <div
               key={opt.value}
+              onClick={() => onChange(opt.value)}
               className="flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all"
               style={{
                 border: `1.5px solid ${value === opt.value ? '#4F46E5' : '#E5E7EB'}`,
@@ -359,7 +340,7 @@ function QuestionInput({ q, value, onChange, onFile }) {
                 style={{ color: value === opt.value ? '#4F46E5' : '#374151' }}>
                 {opt.label}
               </span>
-            </label>
+            </div>
           ))}
         </div>
       );
@@ -371,8 +352,11 @@ function QuestionInput({ q, value, onChange, onFile }) {
             const selected = Array.isArray(value) ? value : [];
             const checked = selected.includes(opt.value);
             return (
-              <label
+              <div
                 key={opt.value}
+                onClick={() => {
+                  onChange(checked ? selected.filter(v => v !== opt.value) : [...selected, opt.value]);
+                }}
                 className="flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all"
                 style={{
                   border: `1.5px solid ${checked ? '#4F46E5' : '#E5E7EB'}`,
@@ -389,7 +373,7 @@ function QuestionInput({ q, value, onChange, onFile }) {
                   style={{ color: checked ? '#4F46E5' : '#374151' }}>
                   {opt.label}
                 </span>
-              </label>
+              </div>
             );
           })}
         </div>
@@ -417,7 +401,7 @@ function QuestionInput({ q, value, onChange, onFile }) {
 
     case 'file':
       return (
-        <div className="rounded-xl p-5 text-center cursor-pointer"
+        <div className="rounded-xl p-5 text-center"
           style={{ border: '2px dashed #C7D2FE', backgroundColor: '#EEF2FF' }}>
           <div className="text-3xl mb-2">📎</div>
           <p className="text-sm font-medium text-indigo-700 mb-1">Click to upload files</p>
