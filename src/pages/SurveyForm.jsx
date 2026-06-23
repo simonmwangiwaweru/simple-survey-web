@@ -86,7 +86,7 @@ export default function SurveyForm() {
       }));
       formData.append('answers', JSON.stringify(answerList));
       questions.forEach(q => {
-        if (files[q.id]) Array.from(files[q.id]).forEach(f => formData.append(`file_${q.id}`, f));
+        if (files[q.id]) Array.from(files[q.id]).forEach(f => formData.append('file_' + q.id, f));
       });
       const result = await api.responses.submit(id, formData);
       setResponseId(result?.response_id || null);
@@ -106,7 +106,7 @@ export default function SurveyForm() {
         <p className="text-gray-500 mb-8">Your response has been submitted successfully.</p>
         {responseId && (
           
-            href={`/api/files/certificate/${responseId}`}
+            href={'/api/files/certificate/' + responseId}
             className="inline-flex items-center gap-2 text-white px-6 py-3 rounded-xl text-sm font-medium mb-4 shadow-sm"
             style={{ background: 'linear-gradient(135deg, #4F46E5, #7C3AED)' }}>
             📥 Download Certificate
@@ -116,7 +116,7 @@ export default function SurveyForm() {
         <button
           onClick={() => navigate('/surveys')}
           className="text-sm text-indigo-600 hover:underline mt-4">
-          ← Back to surveys
+          Back to surveys
         </button>
       </div>
     );
@@ -154,7 +154,7 @@ export default function SurveyForm() {
                     style={{ backgroundColor: '#F9FAFB' }}>
                     {q.type === 'file'
                       ? (files[q.id]
-                        ? `📎 ${files[q.id].length} file(s) selected`
+                        ? ('📎 ' + files[q.id].length + ' file(s) selected')
                         : <span className="text-gray-400 italic">No file</span>)
                       : (answers[q.id]
                         ? (Array.isArray(answers[q.id]) ? answers[q.id].join(', ') : answers[q.id])
@@ -182,7 +182,7 @@ export default function SurveyForm() {
           <button
             onClick={back}
             className="px-5 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50">
-            ← Back
+            Back
           </button>
           <button
             onClick={submit}
@@ -194,7 +194,7 @@ export default function SurveyForm() {
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 Submitting...
               </>
-            ) : '✅ Submit response'}
+            ) : 'Submit response'}
           </button>
         </div>
       </div>
@@ -218,7 +218,7 @@ export default function SurveyForm() {
           <div
             className="h-2 rounded-full transition-all duration-500"
             style={{
-              width: `${((current + 1) / total) * 100}%`,
+              width: ((current + 1) / total * 100) + '%',
               background: 'linear-gradient(90deg, #4F46E5, #7C3AED)',
             }} />
         </div>
@@ -263,14 +263,14 @@ export default function SurveyForm() {
           <button
             onClick={back}
             className="px-5 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50">
-            ← Back
+            Back
           </button>
         ) : <div />}
         <button
           onClick={next}
           className="px-6 py-2.5 text-white rounded-xl text-sm font-medium shadow-sm"
           style={{ background: 'linear-gradient(135deg, #4F46E5, #7C3AED)' }}>
-          {current < total - 1 ? 'Next →' : 'Review answers →'}
+          {current < total - 1 ? 'Next' : 'Review answers'}
         </button>
       </div>
     </div>
@@ -327,7 +327,7 @@ function QuestionInput({ q, value, onChange, onFile }) {
               onClick={() => onChange(opt.value)}
               className="flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all"
               style={{
-                border: `1.5px solid ${value === opt.value ? '#4F46E5' : '#E5E7EB'}`,
+                border: '1.5px solid ' + (value === opt.value ? '#4F46E5' : '#E5E7EB'),
                 backgroundColor: value === opt.value ? '#EEF2FF' : '#F9FAFB',
               }}>
               <div className="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0"
@@ -359,7 +359,7 @@ function QuestionInput({ q, value, onChange, onFile }) {
                 }}
                 className="flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all"
                 style={{
-                  border: `1.5px solid ${checked ? '#4F46E5' : '#E5E7EB'}`,
+                  border: '1.5px solid ' + (checked ? '#4F46E5' : '#E5E7EB'),
                   backgroundColor: checked ? '#EEF2FF' : '#F9FAFB',
                 }}>
                 <div className="w-5 h-5 rounded-lg border-2 flex items-center justify-center shrink-0"
@@ -389,7 +389,7 @@ function QuestionInput({ q, value, onChange, onFile }) {
               onClick={() => onChange(String(n))}
               className="w-12 h-12 rounded-xl text-sm font-bold transition-all"
               style={{
-                border: `2px solid ${value === String(n) ? '#4F46E5' : '#E5E7EB'}`,
+                border: '2px solid ' + (value === String(n) ? '#4F46E5' : '#E5E7EB'),
                 backgroundColor: value === String(n) ? '#4F46E5' : '#F9FAFB',
                 color: value === String(n) ? 'white' : '#6B7280',
               }}>
@@ -406,7 +406,7 @@ function QuestionInput({ q, value, onChange, onFile }) {
           <div className="text-3xl mb-2">📎</div>
           <p className="text-sm font-medium text-indigo-700 mb-1">Click to upload files</p>
           <p className="text-xs text-indigo-400 mb-3">
-            {q.file_config ? `Max ${q.file_config.max_size_mb}MB · Up to ${q.file_config.max_files} file(s)` : 'PDF files accepted'}
+            {q.file_config ? ('Max ' + q.file_config.max_size_mb + 'MB · Up to ' + q.file_config.max_files + ' file(s)') : 'PDF files accepted'}
           </p>
           <input
             type="file"
