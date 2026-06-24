@@ -54,21 +54,13 @@ export default function SurveyResponses() {
         <p className="text-gray-500 text-sm mt-1">View and manage submitted responses</p>
       </div>
 
-      <div className="bg-white rounded-2xl p-4 mb-5"
-        style={{ border: '0.5px solid #E5E7EB' }}>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Select survey
-        </label>
+      <div className="bg-white rounded-2xl p-4 mb-5" style={{ border: '0.5px solid #E5E7EB' }}>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Select survey</label>
         <select
           className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-gray-50 focus:outline-none"
           style={{ color: '#1F2937' }}
           value={selectedSurvey}
-          onChange={e => {
-            setSelectedSurvey(e.target.value);
-            setPage(1);
-            setEmailFilter('');
-            setEmailInput('');
-          }}>
+          onChange={e => { setSelectedSurvey(e.target.value); setPage(1); setEmailFilter(''); setEmailInput(''); }}>
           <option value="">-- Choose a survey --</option>
           {surveys.map(s => (
             <option key={s.id} value={s.id}>{s.title}</option>
@@ -78,18 +70,15 @@ export default function SurveyResponses() {
 
       {selectedSurvey && totalCount > 0 && (
         <div className="grid grid-cols-3 gap-3 mb-5">
-          <div className="bg-white rounded-xl p-4 text-center"
-            style={{ border: '0.5px solid #E5E7EB' }}>
+          <div className="bg-white rounded-xl p-4 text-center" style={{ border: '0.5px solid #E5E7EB' }}>
             <div className="text-2xl font-bold text-gray-800">{totalCount}</div>
             <div className="text-xs text-gray-400 mt-1">Total</div>
           </div>
-          <div className="bg-white rounded-xl p-4 text-center"
-            style={{ border: '0.5px solid #E5E7EB' }}>
+          <div className="bg-white rounded-xl p-4 text-center" style={{ border: '0.5px solid #E5E7EB' }}>
             <div className="text-2xl font-bold" style={{ color: '#4F46E5' }}>{lastPage}</div>
             <div className="text-xs text-gray-400 mt-1">Pages</div>
           </div>
-          <div className="bg-white rounded-xl p-4 text-center"
-            style={{ border: '0.5px solid #E5E7EB' }}>
+          <div className="bg-white rounded-xl p-4 text-center" style={{ border: '0.5px solid #E5E7EB' }}>
             <div className="text-2xl font-bold" style={{ color: '#10B981' }}>
               {responses.filter(r => r.certificate_path).length}
             </div>
@@ -100,25 +89,18 @@ export default function SurveyResponses() {
 
       {selectedSurvey && (
         <div className="flex flex-col sm:flex-row gap-2 mb-5">
-          <div className="flex-1 relative">
-            <input
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none"
-              style={{ color: '#1F2937' }}
-              placeholder="Filter by email address..."
-              value={emailInput}
-              onChange={e => setEmailInput(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && search()} />
-          </div>
-          <button
-            onClick={search}
-            className="px-5 py-2.5 text-white text-sm rounded-xl font-medium"
-            style={{ background: 'linear-gradient(135deg, #4F46E5, #7C3AED)' }}>
+          <input
+            className="flex-1 border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none"
+            style={{ color: '#1F2937' }}
+            placeholder="Filter by email address..."
+            value={emailInput}
+            onChange={e => setEmailInput(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && search()} />
+          <button onClick={search} className="px-5 py-2.5 text-white text-sm rounded-xl font-medium" style={{ background: 'linear-gradient(135deg, #4F46E5, #7C3AED)' }}>
             Search
           </button>
           {emailFilter && (
-            <button
-              onClick={clearSearch}
-              className="px-4 py-2.5 border border-gray-200 text-sm rounded-xl text-gray-600 hover:bg-gray-50">
+            <button onClick={clearSearch} className="px-4 py-2.5 border border-gray-200 text-sm rounded-xl text-gray-600 hover:bg-gray-50">
               Clear
             </button>
           )}
@@ -142,144 +124,98 @@ export default function SurveyResponses() {
             {emailFilter ? ('No responses matching ' + emailFilter) : 'No responses submitted yet.'}
           </p>
           {emailFilter && (
-            <button onClick={clearSearch}
-              className="mt-4 text-sm text-indigo-600 hover:underline">
-              Clear filter
-            </button>
+            <button onClick={clearSearch} className="mt-4 text-sm text-indigo-600 hover:underline">Clear filter</button>
           )}
         </div>
       ) : (
         <div>
           <p className="text-sm text-gray-500 mb-3">
             Showing {responses.length} of {totalCount} response{totalCount !== 1 ? 's' : ''}
-            {emailFilter && (
-              <span className="ml-1 text-indigo-600">matching "{emailFilter}"</span>
-            )}
           </p>
-
           <div className="space-y-3 mb-6">
-            {responses.map((resp, index) => (
-              <div
-                key={resp.id}
-                className="bg-white rounded-2xl overflow-hidden"
-                style={{ border: '0.5px solid #E5E7EB' }}>
-                <div
-                  className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 transition-colors"
-                  onClick={() => toggle(resp.id)}>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0"
-                      style={{ background: 'linear-gradient(135deg, #4F46E5, #7C3AED)' }}>
-                      {'#' + ((page - 1) * 10 + index + 1)}
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-800 text-sm">{'Response #' + resp.id}</p>
-                      <p className="text-xs text-gray-400 mt-0.5">
-                        {new Date(resp.submitted_at).toLocaleDateString('en-US', {
-                          year: 'numeric', month: 'short', day: 'numeric',
-                          hour: '2-digit', minute: '2-digit'
-                        })}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {resp.certificate_path && (
-                      
-                        href={API + '/api/files/certificate/' + resp.id}
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={e => e.stopPropagation()}
-                        className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg font-medium"
-                        style={{ backgroundColor: '#EEF2FF', color: '#4F46E5' }}>
-                        Certificate
-                      </a>
-                    )}
-                    <div
-                      className="w-7 h-7 rounded-full flex items-center justify-center text-xs"
-                      style={{
-                        backgroundColor: '#F3F4F6',
-                        color: '#6B7280',
-                        transform: expanded === resp.id ? 'rotate(180deg)' : 'rotate(0deg)',
-                      }}>
-                      v
-                    </div>
-                  </div>
-                </div>
-
-                {expanded === resp.id && (
-                  <div style={{ borderTop: '0.5px solid #F3F4F6' }}
-                    className="px-4 pb-4 pt-3 space-y-3">
-                    {getAnswers(resp).map(ans => (
-                      <div key={ans.id} className="rounded-xl p-3"
-                        style={{ backgroundColor: '#F9FAFB', border: '0.5px solid #F3F4F6' }}>
-                        <p className="text-xs font-semibold uppercase tracking-wide mb-1"
-                          style={{ color: '#4F46E5' }}>
-                          {ans.question_title}
-                        </p>
-                        <p className="text-sm text-gray-800">
-                          {ans.answer_text || (
-                            <span className="text-gray-400 italic">No answer provided</span>
-                          )}
-                        </p>
-                        {getFiles(ans).length > 0 && (
-                          <div className="mt-2 flex flex-wrap gap-2">
-                            {getFiles(ans).map(f => (
-                              
-                                key={f.id}
-                                href={API + '/api/certificates/' + f.id}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg font-medium"
-                                style={{
-                                  backgroundColor: 'white',
-                                  border: '0.5px solid #E5E7EB',
-                                  color: '#4F46E5',
-                                }}>
-                                {f.original_name}
-                              </a>
-                            ))}
-                          </div>
-                        )}
+            {responses.map((resp, index) => {
+              const cUrl = API + '/api/files/certificate/' + String(resp.id);
+              const rNum = String((page - 1) * 10 + index + 1);
+              const rId = String(resp.id);
+              const hasCert = resp.certificate_path ? true : false;
+              const isExpanded = expanded === resp.id;
+              return (
+                <div key={resp.id} className="bg-white rounded-2xl overflow-hidden" style={{ border: '0.5px solid #E5E7EB' }}>
+                  <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50" onClick={() => toggle(resp.id)}>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ background: 'linear-gradient(135deg, #4F46E5, #7C3AED)' }}>
+                        {'#' + rNum}
                       </div>
-                    ))}
+                      <div>
+                        <p className="font-medium text-gray-800 text-sm">{'Response #' + rId}</p>
+                        <p className="text-xs text-gray-400 mt-0.5">
+                          {new Date(resp.submitted_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CertLink show={hasCert} url={cUrl} />
+                      <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs" style={{ backgroundColor: '#F3F4F6', color: '#6B7280' }}>v</div>
+                    </div>
                   </div>
-                )}
-              </div>
-            ))}
+                  {isExpanded && (
+                    <div className="px-4 pb-4 pt-3 space-y-3" style={{ borderTop: '0.5px solid #F3F4F6' }}>
+                      {getAnswers(resp).map(ans => (
+                        <AnswerCard key={ans.id} ans={ans} files={getFiles(ans)} />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
-
           {lastPage > 1 && (
             <div className="flex items-center justify-center gap-3">
-              <button
-                onClick={() => setPage(p => Math.max(1, p - 1))}
-                disabled={page === 1}
-                className="px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-40">
-                Previous
-              </button>
+              <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-40">Previous</button>
               <div className="flex items-center gap-1">
                 {Array.from({ length: lastPage }, (_, i) => i + 1).map(p => (
-                  <button
-                    key={p}
-                    onClick={() => setPage(p)}
-                    className="w-8 h-8 rounded-lg text-sm font-medium transition-all"
-                    style={{
-                      backgroundColor: page === p ? '#4F46E5' : 'transparent',
-                      color: page === p ? 'white' : '#6B7280',
-                      border: page === p ? 'none' : '0.5px solid #E5E7EB',
-                    }}>
-                    {p}
-                  </button>
+                  <button key={p} onClick={() => setPage(p)} className="w-8 h-8 rounded-lg text-sm font-medium" style={{ backgroundColor: page === p ? '#4F46E5' : 'transparent', color: page === p ? 'white' : '#6B7280', border: page === p ? 'none' : '0.5px solid #E5E7EB' }}>{p}</button>
                 ))}
               </div>
-              <button
-                onClick={() => setPage(p => Math.min(lastPage, p + 1))}
-                disabled={page === lastPage}
-                className="px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-40">
-                Next
-              </button>
+              <button onClick={() => setPage(p => Math.min(lastPage, p + 1))} disabled={page === lastPage} className="px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-40">Next</button>
             </div>
           )}
         </div>
       )}
     </div>
+  );
+}
+
+function CertLink({ show, url }) {
+  if (!show) return null;
+  return (
+    <a href={url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg font-medium" style={{ backgroundColor: '#EEF2FF', color: '#4F46E5' }}>
+      Certificate
+    </a>
+  );
+}
+
+function AnswerCard({ ans, files }) {
+  return (
+    <div className="rounded-xl p-3" style={{ backgroundColor: '#F9FAFB', border: '0.5px solid #F3F4F6' }}>
+      <p className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: '#4F46E5' }}>{ans.question_title}</p>
+      <p className="text-sm text-gray-800">{ans.answer_text || <span className="text-gray-400 italic">No answer provided</span>}</p>
+      {files.length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-2">
+          {files.map(f => (
+            <FileLink key={f.id} fileId={f.id} fileName={f.original_name} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function FileLink({ fileId, fileName }) {
+  const url = API + '/api/certificates/' + String(fileId);
+  return (
+    <a href={url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg font-medium" style={{ backgroundColor: 'white', border: '0.5px solid #E5E7EB', color: '#4F46E5' }}>
+      {fileName}
+    </a>
   );
 }
