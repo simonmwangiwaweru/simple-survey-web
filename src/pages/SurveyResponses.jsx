@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { api } from '../lib/api';
 
+const API = 'https://simple-survey-api-c3kj.onrender.com';
+
 export default function SurveyResponses() {
   const [surveys, setSurveys] = useState([]);
   const [selectedSurvey, setSelectedSurvey] = useState('');
@@ -45,21 +47,17 @@ export default function SurveyResponses() {
   const lastPage = meta ? parseInt(meta.last_page) : 1;
   const totalCount = meta ? parseInt(meta.total_count) : 0;
 
-  const selectedSurveyName = surveys.find(s => s.id === parseInt(selectedSurvey))?.title || '';
-
   return (
     <div>
-      {/* Page Header */}
       <div className="mb-6">
         <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Survey responses</h1>
         <p className="text-gray-500 text-sm mt-1">View and manage submitted responses</p>
       </div>
 
-      {/* Survey Selector */}
       <div className="bg-white rounded-2xl p-4 mb-5"
         style={{ border: '0.5px solid #E5E7EB' }}>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          📋 Select survey
+          Select survey
         </label>
         <select
           className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-gray-50 focus:outline-none"
@@ -78,7 +76,6 @@ export default function SurveyResponses() {
         </select>
       </div>
 
-      {/* Stats Row - only show when survey selected and has responses */}
       {selectedSurvey && totalCount > 0 && (
         <div className="grid grid-cols-3 gap-3 mb-5">
           <div className="bg-white rounded-xl p-4 text-center"
@@ -101,13 +98,11 @@ export default function SurveyResponses() {
         </div>
       )}
 
-      {/* Email Filter */}
       {selectedSurvey && (
         <div className="flex flex-col sm:flex-row gap-2 mb-5">
           <div className="flex-1 relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
             <input
-              className="w-full border border-gray-200 rounded-xl pl-8 pr-3 py-2.5 text-sm bg-white focus:outline-none"
+              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none"
               style={{ color: '#1F2937' }}
               placeholder="Filter by email address..."
               value={emailInput}
@@ -124,13 +119,12 @@ export default function SurveyResponses() {
             <button
               onClick={clearSearch}
               className="px-4 py-2.5 border border-gray-200 text-sm rounded-xl text-gray-600 hover:bg-gray-50">
-              ✕ Clear
+              Clear
             </button>
           )}
         </div>
       )}
 
-      {/* Content */}
       {loading ? (
         <div className="flex flex-col items-center justify-center py-24 gap-3">
           <div className="w-10 h-10 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
@@ -138,16 +132,14 @@ export default function SurveyResponses() {
         </div>
       ) : !selectedSurvey ? (
         <div className="text-center py-24">
-          <div className="text-5xl mb-4">📊</div>
           <h2 className="text-lg font-semibold text-gray-700 mb-2">No survey selected</h2>
           <p className="text-gray-400 text-sm">Select a survey above to view its responses.</p>
         </div>
       ) : responses.length === 0 ? (
         <div className="text-center py-24">
-          <div className="text-5xl mb-4">📭</div>
           <h2 className="text-lg font-semibold text-gray-700 mb-2">No responses found</h2>
           <p className="text-gray-400 text-sm">
-            {emailFilter ? `No responses matching "${emailFilter}"` : 'No responses submitted yet.'}
+            {emailFilter ? ('No responses matching ' + emailFilter) : 'No responses submitted yet.'}
           </p>
           {emailFilter && (
             <button onClick={clearSearch}
@@ -158,36 +150,31 @@ export default function SurveyResponses() {
         </div>
       ) : (
         <div>
-          {/* Results count */}
           <p className="text-sm text-gray-500 mb-3">
-            Showing <span className="font-medium text-gray-700">{responses.length}</span> of{' '}
-            <span className="font-medium text-gray-700">{totalCount}</span> response{totalCount !== 1 ? 's' : ''}
+            Showing {responses.length} of {totalCount} response{totalCount !== 1 ? 's' : ''}
             {emailFilter && (
               <span className="ml-1 text-indigo-600">matching "{emailFilter}"</span>
             )}
           </p>
 
-          {/* Response cards */}
           <div className="space-y-3 mb-6">
             {responses.map((resp, index) => (
               <div
                 key={resp.id}
                 className="bg-white rounded-2xl overflow-hidden"
                 style={{ border: '0.5px solid #E5E7EB' }}>
-                {/* Response Header */}
                 <div
                   className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 transition-colors"
                   onClick={() => toggle(resp.id)}>
                   <div className="flex items-center gap-3">
-                    {/* Avatar */}
                     <div className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0"
                       style={{ background: 'linear-gradient(135deg, #4F46E5, #7C3AED)' }}>
-                      #{(page - 1) * 10 + index + 1}
+                      {'#' + ((page - 1) * 10 + index + 1)}
                     </div>
                     <div>
-                      <p className="font-medium text-gray-800 text-sm">Response #{resp.id}</p>
+                      <p className="font-medium text-gray-800 text-sm">{'Response #' + resp.id}</p>
                       <p className="text-xs text-gray-400 mt-0.5">
-                        🕐 {new Date(resp.submitted_at).toLocaleDateString('en-US', {
+                        {new Date(resp.submitted_at).toLocaleDateString('en-US', {
                           year: 'numeric', month: 'short', day: 'numeric',
                           hour: '2-digit', minute: '2-digit'
                         })}
@@ -196,27 +183,28 @@ export default function SurveyResponses() {
                   </div>
                   <div className="flex items-center gap-2">
                     {resp.certificate_path && (
-                      <a
-                        href={`/api/files/certificate/${resp.id}`}
+                      
+                        href={API + '/api/files/certificate/' + resp.id}
+                        target="_blank"
+                        rel="noreferrer"
                         onClick={e => e.stopPropagation()}
                         className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg font-medium"
                         style={{ backgroundColor: '#EEF2FF', color: '#4F46E5' }}>
-                        📥 Certificate
+                        Certificate
                       </a>
                     )}
                     <div
-                      className="w-7 h-7 rounded-full flex items-center justify-center text-xs transition-transform"
+                      className="w-7 h-7 rounded-full flex items-center justify-center text-xs"
                       style={{
                         backgroundColor: '#F3F4F6',
                         color: '#6B7280',
                         transform: expanded === resp.id ? 'rotate(180deg)' : 'rotate(0deg)',
                       }}>
-                      ▼
+                      v
                     </div>
                   </div>
                 </div>
 
-                {/* Expanded Answers */}
                 {expanded === resp.id && (
                   <div style={{ borderTop: '0.5px solid #F3F4F6' }}
                     className="px-4 pb-4 pt-3 space-y-3">
@@ -235,16 +223,18 @@ export default function SurveyResponses() {
                         {getFiles(ans).length > 0 && (
                           <div className="mt-2 flex flex-wrap gap-2">
                             {getFiles(ans).map(f => (
-                              <a
+                              
                                 key={f.id}
-                                href={`/api/certificates/${f.id}`}
+                                href={API + '/api/certificates/' + f.id}
+                                target="_blank"
+                                rel="noreferrer"
                                 className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg font-medium"
                                 style={{
                                   backgroundColor: 'white',
                                   border: '0.5px solid #E5E7EB',
                                   color: '#4F46E5',
                                 }}>
-                                📎 {f.original_name}
+                                {f.original_name}
                               </a>
                             ))}
                           </div>
@@ -257,14 +247,13 @@ export default function SurveyResponses() {
             ))}
           </div>
 
-          {/* Pagination */}
           {lastPage > 1 && (
             <div className="flex items-center justify-center gap-3">
               <button
                 onClick={() => setPage(p => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="flex items-center gap-1.5 px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-40">
-                ← Previous
+                className="px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-40">
+                Previous
               </button>
               <div className="flex items-center gap-1">
                 {Array.from({ length: lastPage }, (_, i) => i + 1).map(p => (
@@ -284,8 +273,8 @@ export default function SurveyResponses() {
               <button
                 onClick={() => setPage(p => Math.min(lastPage, p + 1))}
                 disabled={page === lastPage}
-                className="flex items-center gap-1.5 px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-40">
-                Next →
+                className="px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-40">
+                Next
               </button>
             </div>
           )}
